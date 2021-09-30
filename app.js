@@ -22,9 +22,11 @@ const options = {
         url: `http://localhost:${PORT}`,
       },
       {
-        url: 'https://api-maintenance-labs-exams.herokuapp.com',
+        url: 'https://api-maintenance-lab-exam.herokuapp.com',
       },
     ],
+    host: 'https://api-maintenance-lab-exam.herokuapp.com',
+    basePath: '/v1',
   },
   apis: ['./src/routes/*.js'],
 };
