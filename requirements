@@ -1,0 +1,38 @@
+Lab:
+cadastrar Lab
+listar Lab ativos
+atualizar Lab existente
+remover logicamente um Lab ativos
+  campos:
+    nome
+    endereço
+    status [ativo, inativo]
+
+Exams:
+cadastrar exame
+listar exames ativos
+atualizar exame existente
+remover logicamente um exame ativos
+  campos:
+    nome
+    tipo [analise clinica, imagem]
+    status [ativo, inativo]
+
+
+Associação:
+associar um exame ativo a um laboratorio ativo
+desassociar um exame ativo a um laboratorio ativo
+
+
+extras
+- Possibilidade de executar cadastro, atualização e remoção em lote;
+- Endpoint que faz a busca por nome do exame e retorna todos os laboratórios associados a esse exame.
+
+Requisitos tecnicos
+- Serviço deve respeitar os princípios RESTFul
+- Criar um `README.md` (arquitetura, instruções de uso, entre outros)
+
+Diferenciais
+- Publicação do ambiente em um serviço cloud de hospedagens (Heroku já configurado)
+- Configurar a aplicação para rodar em um container (criar dockerfile e docker compose) //not work
+- Documentação da API (swagger)

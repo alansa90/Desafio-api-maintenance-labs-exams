@@ -2,9 +2,11 @@ require('dotenv/config')
 
 const MONGOURI = process.env.MONGOURI
 const PORT = process.env.PORT
+const APP_URL = process.env.APP_URL
 
 
 module.exports = {
   MONGOURI,
-  PORT
+  PORT,
+  APP_URL,
 }

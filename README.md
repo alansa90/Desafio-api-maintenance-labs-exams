@@ -2,6 +2,7 @@
 
 #Introduction
 
+- This api was created as a technical skills test for the back-end developer position.
 
 ### Running on docker engine
 1. Make sure your have the docker engine installed with `docker info`

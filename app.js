@@ -7,7 +7,7 @@ const labsRouter = require('./src/routes/Laboratories');
 const examsRouter = require('./src/routes/Exams');
 
 // eslint-disable-next-line import/extensions
-const { PORT } = require('./src/bin/www');
+const { PORT, APP_URL } = require('./src/bin/www');
 
 const options = {
   definition: {
@@ -19,10 +19,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
-      },
-      {
-        url: 'https://api-maintenance-lab-exam.herokuapp.com',
+        url: `${APP_URL}:${PORT}`,
       },
     ],
     host: 'https://api-maintenance-lab-exam.herokuapp.com',
