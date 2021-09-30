@@ -17,13 +17,17 @@ const options = {
       version: '1.0.0',
       description: 'API for maintenane of laboratories and exams',
     },
-    servers: [
-      {
-        url: `${APP_URL}:${PORT}`,
-      },
-    ],
+    // servers: [
+    //   {
+    //     url: `localhost:${PORT}`,
+    //     description: 'Local server',
+    //   },
+    //   {
+    //     url: `${APP_URL}`,
+    //     description: 'Production server',
+    //   },
+    // ],
     host: 'https://api-maintenance-lab-exam.herokuapp.com',
-    basePath: '/v1',
   },
   apis: ['./src/routes/*.js'],
 };
