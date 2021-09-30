@@ -82,8 +82,8 @@ router.post('/', async (req, res) => {
  */
 router.get('/:name', async (req, res) => {
   const exam = await getExam(req.params.name);
-  if (exam) res.json(exam);
-  res.sendStatus(404);
+  if (!exam) res.sendStatus(404);
+  res.json(exam);
 });
 /**
  * @swagger
@@ -119,8 +119,8 @@ router.get('/:name', async (req, res) => {
  */
 router.put('/:name', async (req, res) => {
   const exam = await linkingExamLab(req.params.name, req.body);
-  if (exam) res.json(exam);
-  res.sendStatus(404);
+  if (!exam) res.sendStatus(404);
+  res.json(exam);
 });
 
 router.put('/:name', (req, res) => {

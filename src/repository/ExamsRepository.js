@@ -18,7 +18,7 @@ const getAll = async () => {
 };
 
 const getByName = async name => {
-  const exam = await Exams.findOne({ name });
+  const exam = await Exams.findOne({ name }).populate('labs').exec();
   return exam;
 };
 
