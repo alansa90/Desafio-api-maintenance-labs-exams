@@ -25,8 +25,8 @@ const getByName = async name => {
 const linkExamLab = async (exam, lab) => {
   let res;
   const laboratory = await Laboratories.findOne({ lab });
-  const updated = await Exams.updateOne({ name: exam }, { $addToSet: { labs: laboratory.id } });
-  if (updated.acknowledged) {
+  const updated = await Exams.findOneAndUpdate({ name: exam }, { $addToSet: { labs: laboratory.id } });
+  if (updated) {
     res = await Exams.findOne({ name: exam });
     await Laboratories.updateOne({ lab }, { $addToSet: { exams: res.id } });
   }

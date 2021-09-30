@@ -28,8 +28,7 @@ const router = Router();
  *              $ref: '#/components/schemas/Exam'
  */
 router.get('/', async (req, res) => {
-  const exams = await listExams();
-  res.json(exams);
+  res.json(await listExams());
 });
 /**
  * @swagger
@@ -82,7 +81,9 @@ router.post('/', async (req, res) => {
  *
  */
 router.get('/:name', async (req, res) => {
-  res.json(await getExam(req.params.name));
+  const exam = await getExam(req.params.name);
+  if (exam) res.json(exam);
+  res.sendStatus(404);
 });
 /**
  * @swagger
@@ -117,7 +118,9 @@ router.get('/:name', async (req, res) => {
  *        description: The exam was not found
  */
 router.put('/:name', async (req, res) => {
-  res.json(await linkingExamLab(req.params.name, req.body));
+  const exam = await linkingExamLab(req.params.name, req.body);
+  if (exam) res.json(exam);
+  res.sendStatus(404);
 });
 
 router.put('/:name', (req, res) => {
