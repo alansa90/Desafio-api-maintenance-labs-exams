@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
-const TYPES = ['clinical analysis', 'diagnostic imaging'];
-const STAT = ['active', 'inactive'];
+const TYPES = ['analise clinica', 'imagem'];
+const STAT = ['ativo', 'inativo'];
 
 const schema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   typeExam: {
     type: String,
@@ -27,7 +28,5 @@ const schema = new mongoose.Schema({
 });
 
 const Exams = mongoose.model('exams', schema, 'Exams');
-
-Exams.createIndexes();
 
 module.exports = Exams;

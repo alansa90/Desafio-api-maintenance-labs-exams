@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { createLaboratoy, listLabs } = require('../controllers/LaboratoriesController');
+const { createLaboratoy, listLabs, getLab, linkingLabExam, updateLab, deleteLab } = require('../controllers/LaboratoriesController');
 
 const router = Router();
 /**
@@ -68,7 +68,6 @@ const router = Router();
  *                type: string
  *                description: The reference of exam _id
  *      example:
- *        _id: sd32dsa3d0asdasc0
  *        name: Lab test
  *        address:
  *          publicPlace: Praca Floriano
@@ -78,9 +77,7 @@ const router = Router();
  *          neighborhood: Centro
  *          city: Rio de Janeiro
  *          state: RJ
- *        labStatus: active
- *        exams:
- *          2a1da23s2d3a2sd1dasd
+ *        labStatus: ativo
  */
 
 /**
@@ -122,11 +119,22 @@ router.get('/', async (req, res) => {
  *          application/json:
  *            schema:
  *              $ref: '#components/schemas/Laboratory'
+ *      400:
+ *        description: Bad Request error
  *      500:
- *        description: Some server error
+ *        description: Server error
  */
 router.post('/', async (req, res) => {
-  res.json(await createLaboratoy(req.body));
+  try {
+    const lab = await createLaboratoy(req.body);
+    if (typeof lab === 'object') {
+      res.json(lab);
+    } else if (typeof lab === 'string' && lab.includes('error')) {
+      res.status(400).json(lab);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 /**
@@ -153,18 +161,105 @@ router.post('/', async (req, res) => {
  *        description: The laboratory was not found
  *
  */
-router.get('/:name', (req, res) => {
-  res.json({ foo: req.params.name });
+router.get('/:name', async (req, res) => {
+  const lab = await getLab(req.params.name);
+  if (!lab) return res.status(404).json({ message: 'Not Found' });
+  return res.status(200).json(lab);
 });
-
-router.put('/:name', (req, res) => {
+/**
+ * @swagger
+ * /labs/{name}:
+ *  patch:
+ *    summary: This put update lab fields
+ *    tags: [Laboratory]
+ *    parameters:
+ *      - in: path
+ *        name: name
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Enter lab name to make the link
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              address:
+ *                type: object
+ *                description: The lab address
+ *                properties:
+ *                  publicPlace:
+ *                    type: string
+ *                    description: The publicPlace of address lab
+ *                  number:
+ *                    type: string
+ *                    description: The number of address lab
+ *                  complement:
+ *                    type: string
+ *                    description: The complement of address lab
+ *                  cep:
+ *                    type: string
+ *                    description: The cep of address lab
+ *                  neighborhood:
+ *                    type: string
+ *                    description: The neighborhood of address lab
+ *                  city:
+ *                    type: string
+ *                    description: The city of address lab
+ *                  state:
+ *                    type: string
+ *                    description: The state of address lab
+ *              labStatus:
+ *                type: string
+ *                description: The lab status
+ *            required: true
+ *      description: Enter data to update
+ *    responses:
+ *      200:
+ *        description: The lab description by name
+ *        content:
+ *          application/json:
+ *            schema:
+ *                $ref: '#/components/schemas/Laboratory'
+ *      404:
+ *        description: The lab was not found
+ */
+router.patch('/:name', (req, res) => {
   const { params, body } = req;
-
+  linkingLabExam;
+  updateLab;
   res.json({ ...params, body });
 });
-
-router.delete('/:id', (req, res) => {
-  res.json({ ...req.params, action: 'deleted' });
+/**
+ * @swagger
+ * /labs/{name}:
+ *  delete:
+ *    summary: Delete the lab by name
+ *    tags: [Laboratory]
+ *    parameters:
+ *      - in: path
+ *        name: name
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The lab name
+ *    responses:
+ *      200:
+ *        description: The laboratory was successfully deleted
+ *        content:
+ *          application/json:
+ *            schema:
+ *                $ref: '#/components/schemas/Laboratory'
+ *      404:
+ *        description: The laboratory was not found
+ *
+ */
+router.delete('/:id', async (req, res) => {
+  const lab = await deleteLab(req.params.name);
+  if (!lab) return res.status(404).json({ message: 'Not Found' });
+  return res.status(200).json(lab);
 });
 
 module.exports = router;

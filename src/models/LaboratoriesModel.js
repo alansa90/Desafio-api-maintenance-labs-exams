@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
-const STAT = ['active', 'inactive'];
+const STAT = ['ativo', 'inativo'];
 
 const schema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   address: {
     publicPlace: { type: String, required: true },
@@ -30,7 +31,5 @@ const schema = new mongoose.Schema({
 });
 
 const Laboratories = mongoose.model('laboratories', schema, 'Laboratories');
-
-Laboratories.createIndexes();
 
 module.exports = Laboratories;

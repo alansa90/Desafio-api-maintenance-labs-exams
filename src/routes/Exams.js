@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { createExam, listExams, getExam, linkingExamLab } = require('../controllers/ExamsController');
+const { createExam, listExams, getExam, linkingExamLab, updateExam, deleteExam } = require('../controllers/ExamsController');
 
 const router = Router();
 
@@ -15,7 +15,7 @@ const router = Router();
  * @swagger
  * /exams:
  *  get:
- *   summary: Returns the list of all the exams
+ *   summary: Returns the list of all the exams and link laboratories actives
  *   tags: [Exam]
  *   responses:
  *    200:
@@ -49,11 +49,22 @@ router.get('/', async (req, res) => {
  *          application/json:
  *            schema:
  *              $ref: '#components/schemas/Exam'
+ *      400:
+ *        description: Bad Request error
  *      500:
- *        description: Some server error
+ *        description: Server error
  */
 router.post('/', async (req, res) => {
-  res.json(await createExam(req.body));
+  try {
+    const exam = await createExam(req.body);
+    if (typeof exam === 'object') {
+      res.status(200).json(exam);
+    } else if (typeof exam === 'string' && exam.includes('error')) {
+      res.status(400).json(exam);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 /**
@@ -82,14 +93,14 @@ router.post('/', async (req, res) => {
  */
 router.get('/:name', async (req, res) => {
   const exam = await getExam(req.params.name);
-  if (!exam) res.sendStatus(404);
-  res.json(exam);
+  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  return res.status(200).json(exam);
 });
 /**
  * @swagger
  * /exams/{name}:
  *  put:
- *    summary: Put for link exam with laboratory by name
+ *    summary: This put makes the link between exam and laboratory and the reverse too
  *    tags: [Exam]
  *    parameters:
  *      - in: path
@@ -97,16 +108,19 @@ router.get('/:name', async (req, res) => {
  *        schema:
  *          type: string
  *        required: true
- *        description: The exam name
+ *        description: Enter exam name to make the link
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            name: name
- *            type: string
+ *            type: object
+ *            properties:
+ *              name:
+ *                type: string
+ *                description: The Laboratory name
  *            required: true
- *            description: The Laboratory name
+ *      description: Enter laboratory name to make the link
  *    responses:
  *      200:
  *        description: The exam description by name
@@ -119,20 +133,58 @@ router.get('/:name', async (req, res) => {
  */
 router.put('/:name', async (req, res) => {
   const exam = await linkingExamLab(req.params.name, req.body);
-  if (!exam) res.sendStatus(404);
-  res.json(exam);
+  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  return res.status(200).json(exam);
 });
-
-router.put('/:name', (req, res) => {
+/**
+ * @swagger
+ * /exams/{name}:
+ *  patch:
+ *    summary: This patch update exam fields
+ *    tags: [Exam]
+ *    parameters:
+ *      - in: path
+ *        name: name
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Enter exam name to make the link
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              typeExam:
+ *                type: string
+ *                description: The exam type
+ *              examStatus:
+ *                type: string
+ *                description: The exam status
+ *            required: true
+ *      description: Enter data to update
+ *    responses:
+ *      200:
+ *        description: The exam description by name
+ *        content:
+ *          application/json:
+ *            schema:
+ *                $ref: '#/components/schemas/Exam'
+ *      404:
+ *        description: The exam was not found
+ */
+router.patch('/:name', async (req, res) => {
   const { params, body } = req;
-
-  res.json({ ...params, body });
+  const exam = await updateExam(params, body);
+  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  return res.status(200).json(exam);
 });
 /**
  * @swagger
  * /exams/{name}:
  *  delete:
- *    summary: Delete the exam by name
+ *    summary: The logical delete exam by name, just update examStatusby inactive
  *    tags: [Exam]
  *    parameters:
  *      - in: path
@@ -143,7 +195,7 @@ router.put('/:name', (req, res) => {
  *        description: The exam name
  *    responses:
  *      200:
- *        description: The laboratory was successfully deleted
+ *        description: The exam was successfully deleted
  *        content:
  *          application/json:
  *            schema:
@@ -152,8 +204,10 @@ router.put('/:name', (req, res) => {
  *        description: The exam was not found
  *
  */
-router.delete('/:id', (req, res) => {
-  res.json({ ...req.params, action: 'deleted' });
+router.delete('/:name', async (req, res) => {
+  const exam = await deleteExam(req.params.name);
+  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  return res.status(200).json(exam);
 });
 
 /**
@@ -186,11 +240,9 @@ router.delete('/:id', (req, res) => {
  *                type: string
  *                description: The reference of lab _id
  *      example:
- *        _id: 2a1da23s2d3a2sd1dasd
- *        name: Urine analysis
- *        typeExam: clinical analysis
- *        examStatus: active
- *        labs: [sd32dsa3d0asdasc0]
+ *        name: urina
+ *        typeExam: analise clinica ou imagem
+ *        examStatus: ativo ou inativo
  */
 
 module.exports = router;
