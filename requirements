@@ -9,24 +9,24 @@ remover logicamente um Lab ativos
     status [ativo, inativo]
 
 Exams:
-cadastrar exame
-listar exames ativos
-atualizar exame existente
-remover logicamente um exame ativos
+cadastrar exame ok
+listar exames ativos ok
+atualizar exame existente ok
+remover logicamente um exame ativos ok
   campos:
-    nome
-    tipo [analise clinica, imagem]
-    status [ativo, inativo]
+    nome ok
+    tipo [analise clinica, imagem] ok
+    status [ativo, inativo] ok
 
 
 Associação:
-associar um exame ativo a um laboratorio ativo
+associar um exame ativo a um laboratorio ativo ok
 desassociar um exame ativo a um laboratorio ativo
 
 
 extras
 - Possibilidade de executar cadastro, atualização e remoção em lote;
-- Endpoint que faz a busca por nome do exame e retorna todos os laboratórios associados a esse exame.
+- Endpoint que faz a busca por nome do exame e retorna todos os laboratórios associados a esse exame. ok
 
 Requisitos tecnicos
 - Serviço deve respeitar os princípios RESTFul
