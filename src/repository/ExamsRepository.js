@@ -25,7 +25,6 @@ const getByName = async name => {
     .populate({
       path: 'labs',
       match: { labStatus: { $eq: 'ativo' } },
-      model: 'Project',
       select: ['name', 'labStatus'],
     })
     .exec();
