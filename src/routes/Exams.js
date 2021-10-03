@@ -26,10 +26,48 @@ const router = Router();
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/Exam'
+ *    401:
+ *      $ref: '#/components/responses/UnauthorizedError'
  */
 router.get('/', async (req, res) => {
   res.json(await listExams());
 });
+
+/**
+ * @swagger
+ * /exams/{name}:
+ *  get:
+ *    summary: Get the exam by name
+ *    tags: [Exam]
+ *    parameters:
+ *      - in: path
+ *        name: name
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The exam name
+ *      - in: query
+ *        schema:
+ *          type: boolean
+ *    responses:
+ *      200:
+ *        description: The exam description by name
+ *        content:
+ *          application/json:
+ *            schema:
+ *                $ref: '#/components/schemas/Exam'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        description: The exam was not found
+ *
+ */
+router.get('/:name', async (req, res) => {
+  const exam = await getExam(req.params.name);
+  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  return res.status(200).json(exam);
+});
+
 /**
  * @swagger
  *  /exams:
@@ -51,6 +89,8 @@ router.get('/', async (req, res) => {
  *              $ref: '#components/schemas/Exam'
  *      400:
  *        description: Bad Request error
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
  *        description: Server error
  */
@@ -63,44 +103,15 @@ router.post('/', async (req, res) => {
       res.status(400).json(exam);
     }
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).json({ message: err });
   }
 });
 
 /**
  * @swagger
  * /exams/{name}:
- *  get:
- *    summary: Get the exam by name
- *    tags: [Exam]
- *    parameters:
- *      - in: path
- *        name: name
- *        schema:
- *          type: string
- *        required: true
- *        description: The exam name
- *    responses:
- *      200:
- *        description: The exam description by name
- *        content:
- *          application/json:
- *            schema:
- *                $ref: '#/components/schemas/Exam'
- *      404:
- *        description: The exam was not found
- *
- */
-router.get('/:name', async (req, res) => {
-  const exam = await getExam(req.params.name);
-  if (!exam) return res.status(404).json({ message: 'Not Found' });
-  return res.status(200).json(exam);
-});
-/**
- * @swagger
- * /exams/{name}:
  *  put:
- *    summary: This put makes the link between exam and laboratory and the reverse too
+ *    summary: This put makes the link between exam and laboratory and the other way around too
  *    tags: [Exam]
  *    parameters:
  *      - in: path
@@ -128,14 +139,17 @@ router.get('/:name', async (req, res) => {
  *          application/json:
  *            schema:
  *                $ref: '#/components/schemas/Exam'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
  *        description: The exam was not found
  */
 router.put('/:name', async (req, res) => {
   const exam = await linkingExamLab(req.params.name, req.body);
-  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  if (!exam) return res.status(404).json({ message: `The laboratory ${req.params.name} was not found!` });
   return res.status(200).json(exam);
 });
+
 /**
  * @swagger
  * /exams/{name}:
@@ -148,7 +162,7 @@ router.put('/:name', async (req, res) => {
  *        schema:
  *          type: string
  *        required: true
- *        description: Enter exam name to make the link
+ *        description: Enter exam name
  *    requestBody:
  *      required: true
  *      content:
@@ -171,13 +185,15 @@ router.put('/:name', async (req, res) => {
  *          application/json:
  *            schema:
  *                $ref: '#/components/schemas/Exam'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
  *        description: The exam was not found
  */
 router.patch('/:name', async (req, res) => {
   const { params, body } = req;
   const exam = await updateExam(params, body);
-  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  if (!exam) return res.status(404).json({ message: `The laboratory ${params.name} was not found!` });
   return res.status(200).json(exam);
 });
 /**
@@ -200,19 +216,30 @@ router.patch('/:name', async (req, res) => {
  *          application/json:
  *            schema:
  *                $ref: '#/components/schemas/Exam'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
  *        description: The exam was not found
  *
  */
 router.delete('/:name', async (req, res) => {
   const exam = await deleteExam(req.params.name);
-  if (!exam) return res.status(404).json({ message: 'Not Found' });
+  if (!exam) return res.status(404).json({ message: `The laboratory ${req.params.name} was not found!` });
   return res.status(200).json(exam);
 });
+
+module.exports = router;
 
 /**
  * @swagger
  * components:
+ *  responses:
+ *    UnauthorizedError:
+ *      description: Authentication information is missing or invalid
+ *      headers:
+ *        WWW_Authenticate:
+ *          schema:
+ *            type: string
  *  schemas:
  *    Exam:
  *      type: object
@@ -241,8 +268,6 @@ router.delete('/:name', async (req, res) => {
  *                description: The reference of lab _id
  *      example:
  *        name: urina
- *        typeExam: analise clinica ou imagem
- *        examStatus: ativo ou inativo
+ *        typeExam: analise clinica, imagem
+ *        examStatus: ativo, inativo
  */
-
-module.exports = router;

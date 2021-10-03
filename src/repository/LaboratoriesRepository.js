@@ -51,11 +51,12 @@ const linkExamLab = async (lab, exam) => {
 };
 
 const updateByName = async (name, lab) => {
-  const res = await Laboratories.findByIdAndUpdate({ name }, { ...lab });
+  const res = await Laboratories.findOneAndUpdate({ name }, { ...lab });
   return res;
 };
+
 const deleteByName = async name => {
-  const res = await Laboratories.findByIdAndUpdate({ name }, { $set: { examStatus: 'inativo' } });
+  const res = await Laboratories.findOneAndUpdate({ name }, { $set: { examStatus: 'inativo' } });
   return res;
 };
 

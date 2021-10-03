@@ -9,7 +9,9 @@ const createLaboratoy = async lab => {
   return create(mapped);
 };
 const listLabs = async () => getAll();
+
 const getLab = async name => getByName(name.toLowerCase());
+
 const linkingLabExam = async (lab, exam) => {
   const mapped = {};
   const { name } = exam;

@@ -12,8 +12,11 @@ const createExam = async exam => {
     throw err.message;
   }
 };
+
 const listExams = async () => getAll();
+
 const getExam = async name => getByName(name.toLowerCase());
+
 const linkingExamLab = async (exam, lab) => {
   const mapped = {};
   const { name } = lab;
@@ -27,8 +30,8 @@ const linkingExamLab = async (exam, lab) => {
 const updateExam = async (param, exam) => {
   const { typeExam, examStatus } = exam;
   const mapped = {};
-  mapped.typeExam = typeExam.toLowerCase();
-  mapped.examStatus = examStatus.toLowerCase();
+  mapped.typeExam = typeExam?.toLowerCase();
+  mapped.examStatus = examStatus?.toLowerCase();
 
   return updateByName(param.name.toLowerCase(), mapped);
 };

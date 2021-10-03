@@ -9,6 +9,7 @@ const create = async data => {
   });
   return res;
 };
+
 const getAll = async () => {
   const items = await Exams.find({ examStatus: 'ativo' })
     .populate({
@@ -25,7 +26,7 @@ const getByName = async name => {
     .populate({
       path: 'labs',
       match: { labStatus: { $eq: 'ativo' } },
-      select: ['name', 'labStatus'],
+      select: ['name', 'address'],
     })
     .exec();
   return exam;
@@ -41,13 +42,12 @@ const linkExamLab = async (exam, lab) => {
         .populate({
           path: 'labs',
           match: { labStatus: { $eq: 'ativo' } },
-          select: ['- _id', 'name', 'labStatus'],
+          select: ['name', 'address'],
         })
         .exec();
       await Laboratories.updateOne({ ...lab }, { $addToSet: { exams: res.id } });
     }
   }
-
   return res;
 };
 
@@ -55,6 +55,7 @@ const updateByName = async (name, exam) => {
   const res = await Exams.findOneAndUpdate({ name }, { $set: { exam } });
   return res;
 };
+
 const deleteByName = async name => {
   const res = await Exams.findOneAndUpdate({ name }, { $set: { examStatus: 'inativo' } });
   return res;
