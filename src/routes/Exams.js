@@ -26,8 +26,6 @@ const router = Router();
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/Exam'
- *    401:
- *      $ref: '#/components/responses/UnauthorizedError'
  */
 router.get('/', async (req, res) => {
   res.json(await listExams());
@@ -56,8 +54,6 @@ router.get('/', async (req, res) => {
  *          application/json:
  *            schema:
  *                $ref: '#/components/schemas/Exam'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
  *        description: The exam was not found
  *
@@ -89,8 +85,6 @@ router.get('/:name', async (req, res) => {
  *              $ref: '#components/schemas/Exam'
  *      400:
  *        description: Bad Request error
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
  *        description: Server error
  */
@@ -139,8 +133,6 @@ router.post('/', async (req, res) => {
  *          application/json:
  *            schema:
  *                $ref: '#/components/schemas/Exam'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
  *        description: The exam was not found
  */
@@ -185,8 +177,6 @@ router.put('/:name', async (req, res) => {
  *          application/json:
  *            schema:
  *                $ref: '#/components/schemas/Exam'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
  *        description: The exam was not found
  */
@@ -216,8 +206,6 @@ router.patch('/:name', async (req, res) => {
  *          application/json:
  *            schema:
  *                $ref: '#/components/schemas/Exam'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
  *        description: The exam was not found
  *
@@ -233,13 +221,6 @@ module.exports = router;
 /**
  * @swagger
  * components:
- *  responses:
- *    UnauthorizedError:
- *      description: Authentication information is missing or invalid
- *      headers:
- *        WWW_Authenticate:
- *          schema:
- *            type: string
  *  schemas:
  *    Exam:
  *      type: object

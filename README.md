@@ -1,7 +1,8 @@
 # api-maintenance-of-laboratories-and-exams
 
-#Introduction
 
+##Introduction
+- Api for maintenance of laboratories and exams performed.
 - This api was created as a technical skills test for the back-end developer position.
 
 ## Usage
@@ -17,6 +18,7 @@
 - [EditorConfig](https://www.npmjs.com/package/editorconfig-tools)
 - [Mongoose](https://www.npmjs.com/package/mongoose)
 - [Swagger UI Express](https://www.npmjs.com/package/swagger-ui-express)
+- [Heroku](https://www.heroku.com/)
 
 ## Important informations
 
