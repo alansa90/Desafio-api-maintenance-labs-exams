@@ -210,7 +210,7 @@ router.patch('/:name', async (req, res) => {
  * @swagger
  * /labs/{name}:
  *  delete:
- *    summary: Delete the lab by name
+ *    summary: The logical delete lab by name, just update labStatus by inactive
  *    tags: [Laboratory]
  *    parameters:
  *      - in: path

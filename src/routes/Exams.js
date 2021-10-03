@@ -190,7 +190,7 @@ router.patch('/:name', async (req, res) => {
  * @swagger
  * /exams/{name}:
  *  delete:
- *    summary: The logical delete exam by name, just update examStatusby inactive
+ *    summary: The logical delete exam by name, just update examStatus by inactive
  *    tags: [Exam]
  *    parameters:
  *      - in: path
