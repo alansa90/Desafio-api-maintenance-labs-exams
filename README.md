@@ -8,6 +8,7 @@
 ## Usage
 
  - For local use start with `npm run start` command
+ - Create an `.env` file at the root and add the `PORT` and `MONGOURI`
  - For online access via heroku go to the link [api-maintenance-labs-exams](https://api-maintenance-lab-exam.herokuapp.com/)
 
 ## Tech
