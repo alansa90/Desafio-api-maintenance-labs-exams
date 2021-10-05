@@ -22,7 +22,9 @@
 
 ## Important informations
 
-- The patch route is used to update the fields, the update route to make the link
+- The database is empty for testing.
+
+- The patch route is used to update the fields, the update route to make the link.
 
 - For to link a laboratory to an exam and on the contrary, it is necessary to inform the name of both and that both are previously registered.
 
@@ -32,6 +34,6 @@
 
 - It's possible to list the laboratories and exams, only those with active status are returned.
 
-- It's possible to reactivate an exam or laboratory, just use the patch route and include the new status to perform the update
+- It's possible to reactivate an exam or laboratory, just use the patch route and include the new status to perform the update.
 
 - The delete option only changes the status to inactive, keeping the data in the database.
